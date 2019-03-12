@@ -54,22 +54,7 @@ def siblingIvl(self, card, idealIvl, _old):
 
     return ivl
 
-def toggle_debug():
-    config["Debug"] = not config["Debug"]
-
-    if config["Debug"]:
-        showInfo("Sibling Spacing Debug is now ON")
-    else:
-        showInfo("Sibling Spacing Debug is now OFF")
-
-
 def profileLoaded():
-    # add menu entry
-    action_debug = QAction(mw)
-    mw.form.menuTools.addAction(action_debug)
-    action_debug.setText(_("Debug ON/OFF..."))
-    action_debug.triggered.connect(toggle_debug)
-
     # add scheduler
     anki.sched.Scheduler._adjRevIvl = wrap(anki.sched.Scheduler._adjRevIvl,
                                            siblingIvl, "around")
