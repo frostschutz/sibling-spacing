@@ -15,20 +15,16 @@ from anki.lang import _
 from aqt import *
 from aqt.utils import showInfo
 
+config = mw.addonManager.getConfig(__name__)
+
 # --- Globals: ---
 
-__version__ = 0.2
-enabled = True
-debug = True
+__version__ = 0.02
 
 # --- Functions: ---
 
 def siblingIvl(self, card, idealIvl, _old):
     origIvl = _old(self, card, idealIvl)
-
-    if not enabled:
-        return origIvl
-
     ivl = origIvl
 
     # Penalty
@@ -50,7 +46,7 @@ def siblingIvl(self, card, idealIvl, _old):
         if siblings:
             ivl += boost
 
-    if debug:
+    if config["Debug"]:
         if minIvl and minIvl > 0:
             print("Sibling Spacing %d%+d = %d days for card %d (sibling has %d days)" % (origIvl,ivl-origIvl,ivl,card.id,minIvl,))
         else:
@@ -58,22 +54,10 @@ def siblingIvl(self, card, idealIvl, _old):
 
     return ivl
 
-def toggle():
-    global enabled
-
-    enabled = not enabled
-
-    if enabled:
-        showInfo("Sibling Spacing is now ON")
-    else:
-        showInfo("Sibling Spacing is now OFF")
-
 def toggle_debug():
-    global debug
+    config["Debug"] = not config["Debug"]
 
-    debug = not debug
-
-    if debug:
+    if config["Debug"]:
         showInfo("Sibling Spacing Debug is now ON")
     else:
         showInfo("Sibling Spacing Debug is now OFF")
@@ -81,11 +65,6 @@ def toggle_debug():
 
 def profileLoaded():
     # add menu entry
-    action_toggle = QAction(mw)
-    mw.form.menuTools.addAction(action_toggle)
-    action_toggle.setText(_("Toggle ON/OFF..."))
-    action_toggle.triggered.connect(toggle)
-
     action_debug = QAction(mw)
     mw.form.menuTools.addAction(action_debug)
     action_debug.setText(_("Debug ON/OFF..."))
