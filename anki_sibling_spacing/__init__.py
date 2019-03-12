@@ -11,6 +11,7 @@
 # --- Imports: ---
 
 from anki.hooks import addHook, wrap
+from anki.lang import _
 from aqt import *
 from aqt.utils import showInfo
 
@@ -77,31 +78,18 @@ def toggle_debug():
     else:
         showInfo("Sibling Spacing Debug is now OFF")
 
-def siblingMenu():
-    '''Extend the addon menu with toggle.'''
-    m = None
-
-    for action in mw.form.menuPlugins.actions():
-        menu = action.menu()
-        if menu and menu.title() == "sibling_spacing":
-            m = menu
-            break
-
-    if not m:
-        return
-
-    a = QAction(_("Toggle ON/OFF..."), mw)
-    mw.connect(a, SIGNAL("triggered()"), toggle)
-    m.addAction(a)
-    a = QAction(_("Debug ON/OFF..."), mw)
-    mw.connect(a, SIGNAL("triggered()"), toggle_debug)
-    m.addAction(a)
 
 def profileLoaded():
     # add menu entry
-    mw.addonManager.rebuildAddonsMenu = wrap(mw.addonManager.rebuildAddonsMenu,
-                                             siblingMenu)
-    mw.addonManager.rebuildAddonsMenu()
+    action_toggle = QAction(mw)
+    mw.form.menuTools.addAction(action_toggle)
+    action_toggle.setText(_("Toggle ON/OFF..."))
+    action_toggle.triggered.connect(toggle)
+
+    action_debug = QAction(mw)
+    mw.form.menuTools.addAction(action_debug)
+    action_debug.setText(_("Debug ON/OFF..."))
+    action_debug.triggered.connect(toggle_debug)
 
     # add scheduler
     anki.sched.Scheduler._adjRevIvl = wrap(anki.sched.Scheduler._adjRevIvl,
