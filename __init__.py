@@ -16,6 +16,7 @@ from aqt.utils import showInfo
 
 # --- Globals: ---
 
+__version__ = 0.2
 enabled = True
 debug = True
 
@@ -50,9 +51,9 @@ def siblingIvl(self, card, idealIvl, _old):
 
     if debug:
         if minIvl and minIvl > 0:
-            print "Sibling Spacing %d%+d = %d days for card %d (sibling has %d days)" % (origIvl,ivl-origIvl,ivl,card.id,minIvl,)
+            print("Sibling Spacing %d%+d = %d days for card %d (sibling has %d days)" % (origIvl,ivl-origIvl,ivl,card.id,minIvl,))
         else:
-            print "Sibling Spacing == %d days for card %d without visible siblings" % (ivl,card.id,)
+            print("Sibling Spacing == %d days for card %d without visible siblings" % (ivl,card.id,))
 
     return ivl
 
